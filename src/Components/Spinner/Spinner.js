@@ -1,6 +1,6 @@
-import { useAppContext } from "../Context/AppContext";
+import { useAppContext } from "../../Context/AppContext";
 import { ProgressSpinner } from "primereact/progressspinner";
-import "../css/spinner.css";
+import "./spinner.css";
 
 export default function Spinner() {
   const { loading } = useAppContext(); // Utilizzo del contesto per impostare lo stato di caricamento

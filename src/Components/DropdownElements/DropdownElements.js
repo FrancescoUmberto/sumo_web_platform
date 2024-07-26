@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "primereact/dropdown";
-import { getElement } from "../Services/map_service";
-import { useAppContext } from "../Context/AppContext";
-import "../css/dropdownElements.css";
+import { getElement } from "../../Services/map_service";
+import { useAppContext } from "../../Context/AppContext";
+import "./dropdownElements.css";
 
 const options = [
   { name: "DEFAULT", id: "default" },

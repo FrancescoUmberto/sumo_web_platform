@@ -1,0 +1,6 @@
+.rect {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background-color: rgb(90, 124, 147, 0.5);
+  }

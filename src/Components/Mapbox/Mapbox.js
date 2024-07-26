@@ -1,16 +1,15 @@
 import React, { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import "../css/mapbox.css";
-import { useAppContext } from "../Context/AppContext";
-import Spinner from "../Components/Spinner";
-import { Toast } from "primereact/toast";
+import "./mapbox.css";
+import { useAppContext } from "../../Context/AppContext";
+import Spinner from "../Spinner/Spinner";
+import { useToast } from "../../Context/ToastContext";
 
 export default function Mapbox() {
-  const { loading, setLoading } = useAppContext();
-  const { networkElementsDropdown, setNetworkElementsDropdown } =
-    useAppContext();
+  const { loading, bbox, setBbox } = useAppContext();
+  const { networkElementsDropdown, setNetworkElementsDropdown } = useAppContext();
   const mapContainer = useRef(null);
-  const toast = useRef(null);
+  const toast = useToast();
   const map = useRef(null);
   const [lng, setLng] = useState(16.879213);
   const [lat, setLat] = useState(41.108504);
@@ -18,6 +17,8 @@ export default function Mapbox() {
   const { mapboxData } = useAppContext();
   const { elementData, setElementData } = useAppContext();
   const { mapboxDataType, setResetDropdown } = useAppContext();
+  const { vehiclesData } = useAppContext();
+  const { bounds, setBounds } = useAppContext();
 
   useEffect(() => {
     try {
@@ -29,10 +30,76 @@ export default function Mapbox() {
         center: [lng, lat],
         zoom: zoom,
       });
+      map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
     } catch (error) {
       console.error("Error initializing map:", error);
     }
-  }, []);
+  }, [lng, lat, zoom]);
+
+  useEffect(() => {
+    if (bbox && map.current) {
+      const { left, top, right, bottom } = bbox;
+
+      // Apply bias to the coordinates
+      const adjustedLeft = left;
+      const adjustedTop = top;
+      const adjustedRight = right;
+      const adjustedBottom = bottom;
+
+      // console.log("Adjusted BBOX values:", { adjustedLeft, adjustedTop, adjustedRight, adjustedBottom });
+
+      // Convert pixel coordinates to map coordinates
+      const bottomLeft = map.current.unproject([adjustedLeft, adjustedBottom]);
+      const topRight = map.current.unproject([adjustedRight, adjustedTop]);
+
+      setBounds([bottomLeft, topRight]);
+
+      // console.log("Bounding Box Coordinates:", bounds);
+    }
+  }, [bbox]);
+
+  useEffect(() => {
+    if (vehiclesData.length > 0 && map.current) {
+      const geojson = {
+        type: "FeatureCollection",
+        features: vehiclesData,
+      };
+
+      if (map.current.getSource("vehicles")) {
+        map.current.getSource("vehicles").setData(geojson);
+      } else {
+        map.current.addSource("vehicles", {
+          type: "geojson",
+          data: geojson,
+        });
+        map.current.addLayer({
+          id: "vehicles",
+          type: "circle",
+          source: "vehicles",
+          paint: {
+            "circle-radius": 4,
+            "circle-color": "#007cbf",
+          },
+        });
+        map.current.on("click", "vehicles", (e) => {
+          new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML(
+              "Position <br>" +
+                "Longitude: " +
+                e.lngLat.wrap().lng.toFixed(5) +
+                "<br>" +
+                "Latitude: " +
+                e.lngLat.wrap().lat.toFixed(5) +
+                "<br>" +
+                "Vehicle: " +
+                e.features[0]._vectorTileFeature.properties.id
+            )
+            .addTo(map.current);
+        });
+      }
+    }
+  }, [vehiclesData]);
 
   useEffect(() => {
     try {
@@ -64,11 +131,18 @@ export default function Mapbox() {
           });
           // Add a popup to the network layer
           map.current.on("click", "network", (e) => {
-            // console.log("Feature network:", e.features[0]._vectorTileFeature.properties.id);
             new mapboxgl.Popup()
               .setLngLat(e.lngLat)
               .setHTML(
-                `${e.features[0]._vectorTileFeature.properties.element} ${e.features[0]._vectorTileFeature.properties.id}`
+                "Position <br>" +
+                  "Longitude: " +
+                  e.lngLat.wrap().lng.toFixed(5) +
+                  "<br> " +
+                  "Latitude: " +
+                  e.lngLat.wrap().lat.toFixed(5) +
+                  "<br>" +
+                  "Element: " +
+                  `${e.features[0]._vectorTileFeature.properties.element} ${e.features[0]._vectorTileFeature.properties.id}`
               )
               .addTo(map.current);
           });
@@ -102,11 +176,17 @@ export default function Mapbox() {
             });
             // Add a popup to the element layer
             map.current.on("click", "traffic_lights", (e) => {
-              // console.log("Feature traffic_lights:", e.features[0]._vectorTileFeature.properties.id);
               new mapboxgl.Popup()
                 .setLngLat(e.lngLat)
                 .setHTML(
-                  `Traffic Light: ${e.features[0]._vectorTileFeature.properties.id}`
+                  "Position <br>" +
+                    "Longitude: " +
+                    e.lngLat.wrap().lng +
+                    ", " +
+                    "Latitude: " +
+                    e.lngLat.wrap().lat +
+                    "<br>" +
+                    `Traffic Light ${e.features[0]._vectorTileFeature.properties.id}`
                 )
                 .addTo(map.current);
             });
@@ -132,7 +212,6 @@ export default function Mapbox() {
   return (
     <div>
       {loading && <Spinner />}
-      <Toast ref={toast} />
       <div ref={mapContainer} className="map-container" />
     </div>
   );

@@ -8,7 +8,6 @@ svg {
   align-items: center;
   padding: 1rem;
   background-color: rgb(90, 124, 147);
-  border-radius: 0 0 10px 10px;
 }
 .dropdown {
   margin-left: 1rem;
@@ -18,7 +17,7 @@ svg {
   min-width: 20vw;
 }
 .navbar .p-button:hover {
-    background-color: rgba(211, 230, 203, 0.238);
+  background-color: rgba(211, 230, 203, 0.238);
 }
 .p-overlaypanel .p-button:hover{
   background-color: rgba(211, 230, 203, 0.238);
@@ -54,11 +53,20 @@ svg {
     color: whitesmoke;
   }
 }
+.scenario-dropdown{
+  margin-left: 1rem;
+}
 input[type="file"] {
   display: none;
 }
-.upload-button{
+.buttons{
   display: flex;
   align-items: center;
   margin-right: 0.5rem;
+}
+.p-menuitem-content:hover {
+  background-color: rgba(211, 230, 203, 0.238);
+}
+.p-menuitem .p-focus{
+  background-color: rgba(211, 230, 203, 0.238);
 }

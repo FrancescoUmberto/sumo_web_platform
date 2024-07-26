@@ -2,14 +2,15 @@ import React, { useState, useRef, useEffect } from "react";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
-import { importBBOX } from "../Services/osm_service";
-import "../css/osm_tools.css";
-import { Toast } from "primereact/toast";
-import { useAppContext } from "../Context/AppContext";
-import Spinner from "../Components/Spinner";
+import { importBBOX } from "../../../Services/osm_service";
+import "./osm_tools.css";
+import { useToast } from "../../../Context/ToastContext";
+import { useAppContext } from "../../../Context/AppContext";
+import { useDialog } from "../../../Context/DialogContext";
+import Spinner from "../../Spinner/Spinner";
 
 export default function OSMtools() {
-  const toast = useRef(null);
+  const toast = useToast();
   const { loading, setLoading } = useAppContext();
   const [formData, setFormData] = useState({
     min_lat: "",
@@ -18,6 +19,8 @@ export default function OSMtools() {
     max_lon: "",
   });
   const [isFormValid, setIsFormValid] = useState(false);
+  const { setDialogVisible } = useDialog();
+  const { setBBOXSelectorVisible } = useAppContext();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,7 +66,14 @@ export default function OSMtools() {
         detail: "Network ID: " + response.id,
       });
       localStorage.removeItem("networks");
-      console.log("Data imported successfully:", response.id);
+      // reset the form 
+      setFormData({
+        min_lat: "",
+        min_lon: "",
+        max_lat: "",
+        max_lon: "",
+      });
+      // console.log("Data imported successfully:", response.id);
     } catch (error) {
       toast.current.show({
         severity: "error",
@@ -79,7 +89,6 @@ export default function OSMtools() {
   return (
     <div className="home">
       {loading && <Spinner />}
-      <Toast ref={toast} />
       <form onSubmit={handleSubmit} id="importBBOXForm">
         <div className="form">
           <div className="coordinates">
@@ -130,8 +139,25 @@ export default function OSMtools() {
               </FloatLabel>
             </div>
           </div>
-          <div className="submitButton">
-            <Button label="Import" type="submit" disabled={!isFormValid} />
+          <div className="formButtons">
+            <div className="selectBBOXButton">
+              <Button
+                label="Manually Select BBOX"
+                type="button"
+                onClick={() => {
+                  setDialogVisible(false);
+                  setBBOXSelectorVisible(true);
+                }}
+                icon={
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+                    <path fill="whitesmoke" d="M64 128a32 32 0 1 0 0-64 32 32 0 1 0 0 64zm0-96c29.8 0 54.9 20.4 62 48l196 0c7.1-27.6 32.2-48 62-48c35.3 0 64 28.7 64 64c0 29.8-20.4 54.9-48 62l0 196c27.6 7.1 48 32.2 48 62c0 35.3-28.7 64-64 64c-29.8 0-54.9-20.4-62-48l-196 0c-7.1 27.6-32.2 48-62 48c-35.3 0-64-28.7-64-64c0-29.8 20.4-54.9 48-62l0-196C20.4 150.9 0 125.8 0 96C0 60.7 28.7 32 64 32zm62 368l196 0c5.8-22.5 23.5-40.2 46-46l0-196c-22.5-5.8-40.2-23.5-46-46l-196 0c-5.8 22.5-23.5 40.2-46 46l0 196c22.5 5.8 40.2 23.5 46 46zM96 416a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm256 0a32 32 0 1 0 64 0 32 32 0 1 0 -64 0zm32-288a32 32 0 1 0 0-64 32 32 0 1 0 0 64z" />
+                  </svg>
+                }
+              />
+            </div>
+            <div className="submitButton">
+              <Button label="Import" type="submit" disabled={!isFormValid} />
+            </div>
           </div>
         </div>
       </form>

@@ -8,7 +8,7 @@
 .p-dropdown:not(.p-disabled).p-focus {
   border-color: rgba(211, 230, 203, 0.238);
 }
-.p-dropdown:hover{
+.p-dropdown:hover {
   border-color: rgb(90, 124, 147);
 }
 .p-dropdown-panel
@@ -23,10 +23,10 @@
 .p-overlaypanel:before {
   content: none;
 }
-.p-overlaypanel {
-  /* background-color: rgb(69, 99, 119); */
-  background-color: rgb(90, 124, 147);
-  box-shadow: 10px 0 15px 0 rgba(0, 0, 0, 0.5);
+.p-overlaypanel{
+  background-color: rgba(90, 124, 147, 0.7);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
 }
 .p-button:hover {
   background-color: rgba(211, 230, 203, 0.238);
@@ -34,12 +34,15 @@
 .p-button-icon {
   color: whitesmoke;
 }
-.p-inputtext:hover{
+.p-inputtext:hover {
   border-color: rgb(90, 124, 147);
 }
-.p-inputtext:focus{
+.p-inputtext:focus {
   border-color: rgb(90, 124, 147);
   box-shadow: 0 0 0 0.2rem rgba(90, 124, 147, 0.25);
+}
+.p-panelmenu-header-link{
+  padding: 0.5rem 1.25rem;
 }
 .App-logo {
   height: 40vmin;

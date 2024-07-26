@@ -113,3 +113,23 @@ export async function importNetFile(file) {
     throw error;
   }
 }
+export async function importOsmFile(file) {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    // post the file to the server
+    const response = await axios.post(
+      `${api_url}/osm/importOSMFile`,
+      formData, // <--- Pass formData directly here
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error importing OSM file", error);
+    throw error;
+  }
+}

@@ -10,6 +10,10 @@ export const AppProvider = ({ children }) => {
   const [mapboxDataType, setMapboxDataType] = useState(null);
   const [mapboxDataId, setMapboxDataId] = useState("");
   const [resetDropdown, setResetDropdown] = useState(null);
+  const [vehiclesData, setVehiclesData] = useState([]);
+  const [ bboxSelectorVisible, setBBOXSelectorVisible ] = useState(false);
+  const [bbox, setBbox] = useState(null);
+  const [ bounds, setBounds ] = useState(null);
 
   return (
     <AppContext.Provider
@@ -28,6 +32,14 @@ export const AppProvider = ({ children }) => {
         setMapboxDataId,
         resetDropdown,
         setResetDropdown,
+        vehiclesData,
+        setVehiclesData,
+        bboxSelectorVisible,
+        setBBOXSelectorVisible,
+        bbox,
+        setBbox,
+        bounds,
+        setBounds,
       }}
     >
       {children}

@@ -15,7 +15,7 @@ export const DialogProvider = ({ children }) => {
   };
 
   return (
-    <DialogContext.Provider value={{ dialogVisible, showDialog, hideDialog, setDialog, dialogData }}>
+    <DialogContext.Provider value={{ dialogVisible, showDialog, hideDialog, setDialog, dialogData, setDialogVisible }}>
       {children}
     </DialogContext.Provider>
   );
