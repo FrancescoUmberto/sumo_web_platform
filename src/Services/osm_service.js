@@ -133,3 +133,18 @@ export async function importOsmFile(file) {
     throw error;
   }
 }
+
+export async function deleteNetwork(network_id){
+    const response = await axios.delete(`${api_url}/osm/networks/${network_id}`);
+    return response.data;
+}
+export async  function updateNetwork(network_id, file){
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await axios.put(`${api_url}/osm/networks/${network_id}`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+    return response.data;
+}

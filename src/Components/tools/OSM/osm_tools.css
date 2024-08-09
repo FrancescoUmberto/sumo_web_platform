@@ -2,46 +2,57 @@
   display: flex;
   flex-direction: column;
   gap: 22px;
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 1rem;
 }
 .coordinates {
   display: flex;
   gap: 12px;
 }
-.submitButton {
-  display: flex;
-  justify-content: flex-end;
-}
-.p-button {
-  background-color: rgb(90, 124, 147, 0.7);
-  color: whitesmoke;
-  border: 1px solid rgb(90, 124, 147);
-}
-.p-button:hover {
-  background-color: rgb(90, 124, 147);
-  color: whitesmoke;
-}
-.formButtons{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.selectBBOXButton > button {
-  background-color:rgba(122, 156, 107);
+/* .selectBBOXButton > button {
+  background-color: rgba(122, 156, 107);
   color: whitesmoke;
   border: none;
+} */
+.selectBBOXButton > button > svg{
+  margin-left: auto;
+  margin-right: auto;
 }
 .selectBBOXButton > button:hover {
-  background-color:rgb(130, 182, 109);
-  color: whitesmoke;
+  background-color: rgba(211, 230, 203, 0.238);
 }
-.submitButton > button{
-  background-color:rgba(122, 156, 107);
+.submitButton > button {
+  background-color: rgba(122, 156, 107);
   color: whitesmoke;
   border: none;
 }
 .submitButton > button:hover {
-  background-color:rgb(130, 182, 109);
+  background-color: rgb(130, 182, 109);
   color: whitesmoke;
+}
+
+.upload-button > button:hover {
+  background-color: rgba(211, 230, 203, 0.238);
+}
+
+.p-float-label label {
+  font-weight: 600;
+  color: rgb(130, 182, 109);
+}
+
+.importButtonBox{
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+.submitButton{
+  display: flex;
+  justify-content: flex-end;
+}
+.formButtons {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }

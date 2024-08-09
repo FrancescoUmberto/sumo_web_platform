@@ -19,7 +19,7 @@ svg {
 .navbar .p-button:hover {
   background-color: rgba(211, 230, 203, 0.238);
 }
-.p-overlaypanel .p-button:hover{
+.p-overlaypanel .p-button:hover {
   background-color: rgba(211, 230, 203, 0.238);
 }
 
@@ -27,6 +27,12 @@ svg {
   display: flex;
   margin-right: 1rem;
 }
+
+.buttons .p-button svg {
+  width: 1.2em;
+  height: 1.2em;
+}
+
 .downloadButton {
   display: flex;
   margin-left: 1rem;
@@ -53,13 +59,13 @@ svg {
     color: whitesmoke;
   }
 }
-.scenario-dropdown{
+.scenario-dropdown {
   margin-left: 1rem;
 }
 input[type="file"] {
   display: none;
 }
-.buttons{
+.buttons {
   display: flex;
   align-items: center;
   margin-right: 0.5rem;
@@ -67,6 +73,6 @@ input[type="file"] {
 .p-menuitem-content:hover {
   background-color: rgba(211, 230, 203, 0.238);
 }
-.p-menuitem .p-focus{
+.p-menuitem .p-focus {
   background-color: rgba(211, 230, 203, 0.238);
 }

@@ -3,12 +3,13 @@
   color: whitesmoke;
 }
 .p-dialog-header-icons > button:hover {
-  background-color: rgba(211, 230, 203, 0.238);
+  background-color: rgba(211, 230, 203, 0.238) !important;
 }
 
 .p-dialog .p-dialog-content {
   background-color: rgba(15, 56, 83, 0.4);
   backdrop-filter: blur(4px);
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
 }
 .p-dialog-header {
   background-color: rgba(15, 56, 83, 0.4);
@@ -17,34 +18,56 @@
 }
 
 .p-fileupload-content {
-  background-color: transparent;
+  background-color: transparent !important;
   backdrop-filter: blur(4px);
   color: whitesmoke;
   border: dashed 2px rgba(211, 230, 203, 0.238);
 }
 .p-fileupload-buttonbar {
-  background-color: transparent;
+  background-color: transparent !important;
   backdrop-filter: blur(4px);
   color: whitesmoke;
   border: dashed 2px rgba(211, 230, 203, 0.238);
 }
 .p-fileupload-buttonbar > span {
   color: whitesmoke;
-  background-color: rgba(122, 156, 107);
+  background-color: rgba(122, 156, 107) !important;
+  border: none;
 }
 .p-fileupload-buttonbar > span:hover {
   color: whitesmoke;
-  background-color: rgb(130, 182, 109);
+  background-color: rgb(130, 182, 109) !important;
 }
 .p-fileupload-buttonbar > .p-button:last-child:enabled {
-  background-color: rgb(220, 50, 50);
+  background-color: rgb(220, 50, 50) !important;
+  border: none;
 }
-.p-fileupload-buttonbar > .p-button:not(:last-child):not(:first-child):enabled{
-  background-color: rgb(55, 100, 222);
+.p-fileupload-buttonbar > .p-button:not(:last-child):not(:first-child):enabled {
+  background-color: rgb(55, 100, 222) !important;
+  border: none;
 }
-.p-fileupload-buttonbar > .p-button:last-child:enabled:hover{
-  background-color: rgb(255, 50, 50);
+.p-fileupload-buttonbar > .p-button:last-child:enabled:hover {
+  background-color: rgb(255, 50, 50) !important;
+  border: none;
 }
-.p-fileupload-buttonbar > .p-button:not(:last-child):not(:first-child):enabled:hover{
-  background-color: rgb(55, 100, 255);
+.p-fileupload-buttonbar
+  > .p-button:not(:last-child):not(:first-child):enabled:hover {
+  background-color: rgb(55, 100, 255) !important;
+  border: none;
+}
+.p-fileupload-buttonbar > .p-button:disabled {
+  background-color: transparent;
+  border: none;
+}
+
+.p-accordion .p-accordion-header .p-accordion-header-link {
+  background-color: rgba(71, 101, 122, 0.4);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
+  color: whitesmoke;
+}
+.p-accordion-content {
+  background-color: rgba(71, 101, 122, 0.4);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
 }

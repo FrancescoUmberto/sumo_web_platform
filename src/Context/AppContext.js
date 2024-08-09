@@ -14,6 +14,8 @@ export const AppProvider = ({ children }) => {
   const [ bboxSelectorVisible, setBBOXSelectorVisible ] = useState(false);
   const [bbox, setBbox] = useState(null);
   const [ bounds, setBounds ] = useState(null);
+  const [selectedNetwork, setSelectedNetwork] = useState(null);
+
 
   return (
     <AppContext.Provider
@@ -40,6 +42,8 @@ export const AppProvider = ({ children }) => {
         setBbox,
         bounds,
         setBounds,
+        selectedNetwork,
+        setSelectedNetwork
       }}
     >
       {children}

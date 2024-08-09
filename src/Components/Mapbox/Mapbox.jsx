@@ -7,7 +7,8 @@ import { useToast } from "../../Context/ToastContext";
 
 export default function Mapbox() {
   const { loading, bbox, setBbox } = useAppContext();
-  const { networkElementsDropdown, setNetworkElementsDropdown } = useAppContext();
+  const { networkElementsDropdown, setNetworkElementsDropdown } =
+    useAppContext();
   const mapContainer = useRef(null);
   const toast = useToast();
   const map = useRef(null);
@@ -19,6 +20,29 @@ export default function Mapbox() {
   const { mapboxDataType, setResetDropdown } = useAppContext();
   const { vehiclesData } = useAppContext();
   const { bounds, setBounds } = useAppContext();
+  useEffect(() => {
+    if (mapboxData == null) {
+      try {
+        // remove the network layer
+        map.current.removeLayer("network");
+        map.current.removeSource("network");
+        setNetworkElementsDropdown(false);
+        // remove the element layer
+        map.current.removeLayer("traffic_lights");
+        map.current.removeSource("traffic_lights");
+        setElementData(null);
+      } catch (error) {}
+    }
+  }, [mapboxData]);
+
+  useEffect(() => {
+    if (mapboxDataType == "Default") {
+      try {
+        map.current.removeLayer("traffic_lights");
+        map.current.removeSource("traffic_lights");
+      } catch (error) {}
+    }
+  });
 
   useEffect(() => {
     try {
@@ -104,13 +128,21 @@ export default function Mapbox() {
   useEffect(() => {
     try {
       if (mapboxData && map.current) {
-        const geojson = JSON.parse(mapboxData);
+        if (typeof mapboxData === "string") {
+          var geojson = JSON.parse(mapboxData);
+        } else {
+          var geojson = mapboxData;
+        }
         // Handle network layer
         setElementData(null);
-        if (map.current.getLayer(mapboxDataType)) {
-          map.current.getSource("traffic_lights").setData(elementData);
-          map.current.removeLayer("traffic_lights");
-          map.current.removeSource("traffic_lights");
+        try {
+          if (map.current.getLayer(mapboxDataType)) {
+            map.current.getSource("traffic_lights").setData(elementData);
+            map.current.removeLayer("traffic_lights");
+            map.current.removeSource("traffic_lights");
+          }
+        } catch (error) {
+          console.error("Error removing element layer:", error);
         }
         if (map.current.getSource("network")) {
           map.current.getSource("network").setData(geojson);

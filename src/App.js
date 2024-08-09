@@ -9,7 +9,8 @@ import { DialogProvider } from "./Context/DialogContext";
 import { AppProvider, useAppContext } from "./Context/AppContext"; // import useAppContext
 import { ToastProvider } from "./Context/ToastContext";
 import CustomDialog from "./Components/Dialog/Dialog";
-import DropdownElements from "./Components/DropdownElements/DropdownElements";
+// import DropdownElements from "./Components/DropdownElements/DropdownElements";
+import NetworkOptions from "./Components/NetworkOptions/NetworkOptions";
 import BBOXSelector from "./Components/tools/BBOXSelector/BBOXSelector";
 import BboxValues from "./Components/tools/BBOXValues/BboxValues";
 
@@ -34,7 +35,7 @@ function App() {
 function ConditionalDropdown() {
   const { networkElementsDropdown } = useAppContext();
 
-  return networkElementsDropdown ? <DropdownElements /> : null;
+  return networkElementsDropdown ? <NetworkOptions /> : null;
 }
 function ConditionalSelector() {
   const { bboxSelectorVisible } = useAppContext();

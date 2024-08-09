@@ -1,0 +1,12 @@
+/* .network-elements {
+  position: absolute;
+  left: 2rem;
+  top: 6rem;
+} */
+.network-elements{
+  display: flex;
+  width: 100%;
+}
+.network-elements .p-dropdown{
+  min-width: fit-content;
+}

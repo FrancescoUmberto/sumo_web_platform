@@ -40,7 +40,7 @@ export default function BboxValues() {
           summary: "Success",
           detail: `Network ID: ${res.id}`,
         });
-
+        sessionStorage.removeItem("networks");
       }
     );
   };

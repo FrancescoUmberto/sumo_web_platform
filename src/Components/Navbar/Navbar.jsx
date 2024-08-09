@@ -6,28 +6,34 @@ import {
   downloadNetworkGEOjson,
   downloadNetworkXML,
 } from "../../Services/osm_service";
-import { getScenarioByNetwork } from "../../Services/scenario_service";
+import {
+  getScenarioByNetwork,
+  getScenarioByIdConfiguration,
+  getScenarioByIdZip,
+} from "../../Services/scenario_service";
 import { Button } from "primereact/button";
 import "./navbar.css";
 import { useDialog } from "../../Context/DialogContext";
 import { useAppContext } from "../../Context/AppContext";
 import { OverlayPanel } from "primereact/overlaypanel";
 import Spinner from "../Spinner/Spinner";
-import { useToast } from '../../Context/ToastContext'; 
+import { useToast } from "../../Context/ToastContext";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { PanelMenu } from "primereact/panelmenu";
 
+
 export default function Navbar() {
-  const toast = useToast(); 
+  const toast = useToast();
+  const { selectedNetwork, setSelectedNetwork } = useAppContext();
   const [isNetworkSelected, setIsNetworkSelected] = useState(false);
   const [networks, setNetworks] = useState([]);
-  const [selectedNetwork, setSelectedNetwork] = useState(null);
   const [loadingNetworksList, setLoadingNetworksList] = useState(false);
   const [loadingNetworkScenariosList, setLoadingNetworkScenariosList] =
     useState(null);
   const [scenarios, setScenarios] = useState([]);
   const [selectedScenario, setSelectedScenario] = useState(null);
   const [playSim, setPlaySim] = useState(false);
+  const [downloadItems, setDownloadItems] = useState([]);
 
   const {
     loading,
@@ -39,47 +45,80 @@ export default function Navbar() {
   } = useAppContext();
   const { setDialog } = useDialog();
   const downloadOverlay = useRef(null);
-  const downloadItems = [
-    {
-      label: "Network",
-      items: [
+  useEffect(() => {
+    if (selectedNetwork !== null && selectedScenario === null) {
+      setDownloadItems([
         {
-          label: "GeoJSON",
-          icon: "pi pi-file",
-          command: () => {
-            downloadNetworkGEOjson(selectedNetwork.network_id);
-          },
+          label: "Network",
+          items: [
+            {
+              label: "GeoJSON",
+              icon: "pi pi-file",
+              command: () => {
+                downloadNetworkGEOjson(selectedNetwork.network_id);
+              },
+            },
+            {
+              label: "XML",
+              icon: "pi pi-file",
+              command: () => {
+                downloadNetworkXML(selectedNetwork.network_id);
+              },
+            },
+          ],
+        },
+      ]);
+    } else if (selectedScenario !== null) {
+      setDownloadItems([
+        {
+          label: "Network",
+          items: [
+            {
+              label: "GeoJSON",
+              icon: "pi pi-file",
+              command: () => {
+                downloadNetworkGEOjson(selectedNetwork.network_id);
+              },
+            },
+            {
+              label: "XML",
+              icon: "pi pi-file",
+              command: () => {
+                downloadNetworkXML(selectedNetwork.network_id);
+              },
+            },
+          ],
         },
         {
-          label: "XML",
-          icon: "pi pi-file",
-          command: () => {
-            downloadNetworkXML(selectedNetwork.network_id);
-          },
+          label: "Scenario",
+          items: [
+            {
+              label: "zip",
+              icon: "pi pi-file",
+              command: () => {
+                getScenarioByIdZip(selectedScenario.scenario_id);
+              },
+            },
+            {
+              label: "Configuration",
+              icon: "pi pi-wrench",
+              command: () => {
+                getScenarioByIdConfiguration(selectedScenario.scenario_id);
+              },
+            },
+          ],
         },
-      ],
-    },
-    {
-      label: "Scenario",
-      items: [
-        {
-          label: "zip",
-          icon: "pi pi-file",
-        },
-        {
-          label: "Configuration",
-          icon: "pi pi-wrench",
-        },
-      ],
-    },
-  ];
+      ]);
+    }
+  }, [selectedNetwork, selectedScenario]);
+
   const fetchNetworks = async () => {
     setLoadingNetworksList(true);
     try {
       const response = await networkList();
       setNetworks(response);
       setLoadingNetworksList(false);
-      sessionStorage.setItem("networks", JSON.stringify(response)); // store the response in session storage
+      sessionStorage.setItem("networks", JSON.stringify(response));
     } catch (error) {
       setLoadingNetworksList(false);
       console.error("Error fetching networks:", error);
@@ -89,6 +128,7 @@ export default function Navbar() {
   const handleFetchNetworks = async () => {
     if (!sessionStorage.getItem("networks")) {
       fetchNetworks();
+      sessionStorage.removeItem("networks");
     } else {
       setNetworks(JSON.parse(sessionStorage.getItem("networks")));
     }
@@ -119,6 +159,11 @@ export default function Navbar() {
       fetchNetworks();
       console.error("Errore durante il download del file", error);
     }
+  };
+
+  const addButton = {
+    label: "Add",
+    icon: "pi pi-plus",
   };
 
   const fetchScenarios = async () => {
@@ -164,7 +209,7 @@ export default function Navbar() {
 
   const handleStartSim = () => {
     setPlaySim(true);
-    const client = new W3CWebSocket("ws://localhost:6789");
+    const client = new W3CWebSocket("ws://localhost:62583");
     client.onmessage = (message) => {
       console.log("Message received from server:", message);
       const dataFromServer = JSON.parse(message.data);
@@ -243,7 +288,14 @@ export default function Navbar() {
         <div className="buttons">
           <div className="buttons">
             <Button
-              icon="pi pi-play"
+              icon={
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                  <path
+                    d="M56.3 66.3c-4.9-3-11.1-3.1-16.2-.3s-8.2 8.2-8.2 14l0 352c0 5.8 3.1 11.1 8.2 14s11.2 2.7 16.2-.3l288-176c4.8-2.9 7.7-8.1 7.7-13.7s-2.9-10.7-7.7-13.7l-288-176zM24.5 38.1C39.7 29.6 58.2 30 73 39L361 215c14.3 8.7 23 24.2 23 41s-8.7 32.2-23 41L73 473c-14.8 9.1-33.4 9.4-48.5 .9S0 449.4 0 432L0 80C0 62.6 9.4 46.6 24.5 38.1z"
+                    fill="#ffffff"
+                  />
+                </svg>
+              }
               severity="primary"
               rounded
               text
@@ -252,7 +304,7 @@ export default function Navbar() {
               }}
             />
           </div>
-          <div className="upload-button">
+          {/* <div className="upload-button">
             <Button
               icon="pi pi-upload"
               severity="primary"
@@ -260,14 +312,14 @@ export default function Navbar() {
               text
               onClick={() => setDialog("Upload")}
             />
-          </div>
+          </div> */}
           <div className="create-button">
             <Button
               icon="pi pi-plus"
               severity="primary"
               rounded
               text
-              onClick={() => setDialog("Network")}
+              onClick={() => setDialog("default-dialog")}
             />
           </div>
         </div>

@@ -4,9 +4,9 @@
   bottom: 10px;
   background-color: rgba(15, 56, 83, 0.4);
   backdrop-filter: blur(4px);
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
   padding: 1rem;
   border-radius: 1rem;
-  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.1);
   > h3 {
     color: whitesmoke;
     font-weight: 800;
@@ -59,6 +59,7 @@
 .importButton {
   background-color: rgba(0, 255, 0, 0.35);
   border: none;
+  color: whitesmoke;
 }
 .importButton:hover {
   background-color: rgba(0, 240, 0, 0.6);

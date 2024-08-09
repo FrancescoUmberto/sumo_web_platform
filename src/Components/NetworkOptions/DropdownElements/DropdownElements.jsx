@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "primereact/dropdown";
-import { getElement } from "../../Services/map_service";
-import { useAppContext } from "../../Context/AppContext";
+import { getElement } from "../../../Services/map_service";
+import { useAppContext } from "../../../Context/AppContext";
 import "./dropdownElements.css";
 
 const options = [
@@ -33,14 +33,19 @@ export default function DropdownElements() {
   // console.log("resetDropdown", resetDropdown, new Date().toLocaleTimeString());
   const handleOptionSelection = async (e) => {
     if (resetDropdown) return;
-
     setSelectedOption(e.value);
     try {
-      setLoading(true);
-      const response = await getElement(mapboxDataId, e.value.id);
-      setMapboxDataType("traffic_lights");
-      setElementData(response);
-      setLoading(false);
+      if (e.value.id === "default") {
+        setMapboxDataType("Default")
+        return;
+      }
+      else if (e.value.id === "traffic_light") {
+        setLoading(true);
+        const response = await getElement(mapboxDataId, e.value.id);
+        setMapboxDataType("traffic_lights");
+        setElementData(response);
+        setLoading(false);
+      }
     } catch (error) {
       console.error("Error fetching element:", error);
     }
@@ -54,14 +59,14 @@ export default function DropdownElements() {
   }, [resetDropdown, setResetDropdown]);
 
   return (
-    <Dropdown
-      className="network-elements"
-      value={selectedOption}
-      options={options}
-      onChange={handleOptionSelection}
-      placeholder="Select network element"
-      optionLabel="name"
-      optionValue="id"
-    />
+      <Dropdown
+        className="network-elements"
+        value={selectedOption}
+        options={options}
+        onChange={handleOptionSelection}
+        placeholder="Select network element"
+        optionLabel="name"
+        optionValue="id"
+      />
   );
 }

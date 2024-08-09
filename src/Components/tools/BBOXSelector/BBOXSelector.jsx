@@ -46,12 +46,12 @@ export default function BBOXSelector() {
       isNaN(adjustedRight) ||
       isNaN(adjustedBottom)
     ) {
-      console.error("Invalid BBOX values:", {
-        adjustedLeft,
-        adjustedTop,
-        adjustedRight,
-        adjustedBottom,
-      });
+      // console.error("Invalid BBOX values:", {
+      //   adjustedLeft,
+      //   adjustedTop,
+      //   adjustedRight,
+      //   adjustedBottom,
+      // });
       return;
     }
 
